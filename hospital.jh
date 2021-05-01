@@ -1,0 +1,114 @@
+
+entity Hospital {
+	hospitalName String,
+    location String,
+    avaibleBeds Int,
+    capasity Int
+}
+
+entity Room {
+	hospitalId Int,
+    coun Int,
+    amountOfBeds Int,
+    roomType RoomType,
+	countryName String
+}
+
+// an ignored comment
+/** not an ignored comment */
+entity Location {
+	streetAddress String,
+	postalCode String,
+	city String,
+	stateProvince String
+}
+
+/**
+ * The User entity.
+ */
+entity User {
+	
+	userName String,
+	email String,
+	phoneNumber String,
+	roleId Int
+	
+}
+
+entity Role{
+	roleName String
+}
+entity Patient {
+	/**
+	* The firstname attribute.
+	*/
+	firstName String,
+	lastName String,
+	arivalDate LocalDate,
+    roomId Int,
+    userId Int
+    
+}
+
+
+
+enum RoomType {
+    Renimation, Simple
+}
+
+
+relationship OneToOne {
+	Country{region} to Region
+}
+
+relationship OneToOne {
+	Location{country} to Country
+}
+
+relationship OneToOne {
+	Hospital{location} to Location
+}
+
+relationship ManyToMany {
+	Job{task(title)} to Task{job}
+}
+relationship ManyToMany {
+	User{roleId} to Role{roleName}
+}
+// defining multiple OneToMany relationships with comments
+relationship OneToMany {
+	User to Patient{userId},
+	/**
+	* A relationship
+	*/
+	Room to
+	/**
+	* Another side of the same relationship
+	*/
+	Patient{roomId}
+    Hospital to Room{hospitalId}
+}
+
+relationship ManyToOne {
+	Employee{manager} to Employee
+}
+
+// defining multiple oneToOne relationships
+relationship OneToOne {
+	JobHistory{job} to Job,
+	JobHistory{department} to Department,
+	JobHistory{employee} to Employee
+}
+
+// Set pagination options
+paginate JobHistory, Employee with infinite-scroll
+paginate Job with pagination
+
+// Use Data Transfer Objects (DTO)
+// dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl except Employee, Job
+
+// Set an angular suffix
+// angularSuffix * with mySuffix
